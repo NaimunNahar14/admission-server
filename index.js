@@ -53,11 +53,17 @@ async function run() {
 
 app.post('/admission', async (req, res) => {
   const admission = req.body;
-  console.log(addToy);
-  const result = await admissionCollection.insertOne(admission);
-  res.send(result);
-
+  console.log(admission);
+  
+  try {
+      const result = await admissionCollection.insertOne(admission);
+      res.status(201).json({ insertedId: result.insertedId });
+  } catch (error) {
+      console.error('Error inserting admission:', error);
+      res.status(500).json({ error: 'Failed to insert admission.' });
+  }
 });
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
